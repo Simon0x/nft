@@ -17,8 +17,8 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+require("dotenv").config();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 // const infuraKey = "fj4jll3k.....";
 //
 // const fs = require('fs');
@@ -34,6 +34,10 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
+  api_keys: {
+    etherscan: process.env.ETHERSCAN_API_KEY,
+  },
+  plugins: ["truffle-plugin-verify"],
 
   networks: {
     development: {
@@ -43,14 +47,13 @@ module.exports = {
     },
     rinkeby: {
       provider: function () {
-        return new HDWalletProvider(
-          "b384b22b655fc64991bcab3a3d7752c1b9a73a51dc398a7b5c7ea026818b99e8",
-          "https://rinkeby.infura.io/v3/92bf6107916a497585167e6b7f122757"
-        );
+        return new HDWalletProvider({
+          privateKeys: [process.env.PRIVATE_KEY],
+          providerOrUrl: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
+        });
       },
       network_id: 4,
-      gas: 4500000,
-      gasPrice: 10000000000,
+      gas: 0x989680,
     },
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
